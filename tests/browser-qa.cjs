@@ -13,6 +13,10 @@ const fs = require('node:fs');
   await page.waitForSelector('#featured .lead-card');
   await page.screenshot({path:'qa-results/home-'+width+'.png',fullPage:true});
   assert.equal(await page.locator('#featured .lead-card').count(),3);
+  assert.equal(await page.locator('#atlasDots button').count(),64);
+  await page.locator('#atlasDots button').nth(3).click();
+  assert.match(await page.locator('#atlasPreview').innerText(),/Leymah Gbowee/);
+  await page.locator('#atlasDots button').nth(8).click();
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Home overflows at '+width);
   await page.locator('[data-tab="archive"]').click();
   await page.waitForSelector('#storyGrid .story');
@@ -23,7 +27,7 @@ const fs = require('node:fs');
   }
   const media=await page.evaluate(()=>Array.from(document.querySelectorAll('#storyGrid .media-frame')).map(e=>({photo:!!e.querySelector('img'),fallback:e.querySelector('.photo-fallback')?.hidden??null})));
   assert.equal(media.length,64);
-  assert.equal(media.filter(e=>e.photo).length,17);
+  assert.equal(media.filter(e=>e.photo).length,24);
   await page.locator('[data-go="home"]').first().click();
   await page.locator('#coverStory').click();
   assert.equal(await page.locator('#detail').evaluate(e=>e.open),true);
@@ -40,7 +44,7 @@ const fs = require('node:fs');
   await page.locator('.workspace-nav [data-go="impact"]').first().click();
   assert.equal(await page.locator('#impact').evaluate(e=>e.hidden),false);
   assert.equal(errors.length,0,errors.join('; '));
-  results.push({width,passed:true,images:17,stories:64,errors});
+  results.push({width,passed:true,images:24,stories:64,errors});
   await page.close();
  }
  const failure=await browser.newPage({viewport:{width:390,height:844}});
