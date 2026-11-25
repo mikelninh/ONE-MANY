@@ -1,0 +1,57 @@
+const { chromium } = require('playwright');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+(async()=>{
+ const browser=await chromium.launch({headless:true});
+ fs.mkdirSync('qa-results',{recursive:true});
+ const results=[];
+ for(const width of [1440,1024,768,390,320]){
+  const page=await browser.newPage({viewport:{width,height:900}});
+  const errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+  await page.waitForSelector('#featured .lead-card');
+  await page.screenshot({path:'qa-results/home-'+width+'.png',fullPage:true});
+  assert.equal(await page.locator('#featured .lead-card').count(),3);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Home overflows at '+width);
+  await page.locator('[data-tab="archive"]').click();
+  await page.waitForSelector('#storyGrid .story');
+  assert.equal(await page.locator('#storyGrid .story').count(),64);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Archive overflows at '+width);
+  if(width===1440||width===390){
+   await page.screenshot({path:'qa-results/archive-'+width+'.png',fullPage:true});
+  }
+  const media=await page.evaluate(()=>Array.from(document.querySelectorAll('#storyGrid .media-frame')).map(e=>({photo:!!e.querySelector('img'),fallback:e.querySelector('.photo-fallback')?.hidden??null})));
+  assert.equal(media.length,64);
+  assert.equal(media.filter(e=>e.photo).length,17);
+  await page.locator('[data-go="home"]').first().click();
+  await page.locator('#coverStory').click();
+  assert.equal(await page.locator('#detail').evaluate(e=>e.open),true);
+  assert.match(await page.locator('#detailBody').innerText(),/51 Mio/);
+  await page.locator('#useDeep').click();
+  assert.equal(await page.locator('#projects').evaluate(e=>e.hidden),false);
+  assert.match(await page.locator('#f-title').inputValue(),/grüner Ort/);
+  await page.locator('[data-go="home"]').first().click();
+  await page.locator('#jumpAction').click();
+  await page.locator('[data-topic="1"]').click();
+  await page.locator('#wizardNext').click();
+  await page.locator('#quickStart').click();
+  assert.equal(await page.locator('#projects').evaluate(e=>e.hidden),false);
+  await page.locator('.workspace-nav [data-go="impact"]').first().click();
+  assert.equal(await page.locator('#impact').evaluate(e=>e.hidden),false);
+  assert.equal(errors.length,0,errors.join('; '));
+  results.push({width,passed:true,images:17,stories:64,errors});
+  await page.close();
+ }
+ const failure=await browser.newPage({viewport:{width:390,height:844}});
+ await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
+ await failure.goto('http://127.0.0.1:8765/');
+ await failure.waitForSelector('#featurePhoto .media-frame.art-only');
+ assert.equal(await failure.locator('#featurePhoto .photo-fallback').isVisible(),true);
+ assert.equal(await failure.locator('#featurePhoto img').isVisible(),false);
+ await failure.screenshot({path:'qa-results/fallback-mobile.png'});
+ results.push({brokenImageFallback:true});
+ fs.writeFileSync('qa-results/results.json',JSON.stringify(results,null,2));
+ console.log(JSON.stringify(results));
+ await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});
