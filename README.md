@@ -5,11 +5,11 @@ Die Welt ist noch nicht fertig.
 
 An independent, open research and product prototype for human agency and collective learning.
 
-## Experience v2.0
+## Experience v4.0 — The Museum of Human Possibility
 - Discover: 64 short portraits across eight themes, including three expanded case studies.
 - Understand: practical learning hypotheses, methods, source leads, and a research notebook.
 - Become: three-step guided experiment creation, private project workspace, official democratic participation routes, and local outcome documentation.
-- 17 archival image references and 64 editorial fallback covers. The three lead image source pages and licenses were checked; not every image or story has been independently reviewed.
+- 24 archival image references and 64 editorial fallback covers. The three lead image source pages and licenses were checked; not every image or story has been independently reviewed.
 - Personal drafts and notes are stored in the browser, not synced to a server. JSON exports are available. No accounts or live AI.
 
 ## Try it
@@ -22,3 +22,6 @@ Study 10,000 comparable cases over time, including failures and counterevidence.
 
 ## Status and limitations
 The source includes a working local prototype. Syntax and core simulated JavaScript workflows have been checked. Full visual browser QA, accessibility testing, image delivery and rights audit across all cases, and independent impact evaluation remain outstanding. Photos are loaded from Wikimedia; attribution and license links are shown beside the photographs. Editorial fallback graphics are original typographic designs, not historical images. No official partnership is claimed. Code licensing and contribution governance remain to be agreed.
+
+## Design definition
+A digital museum, not a feed. Four rooms: curated historical exhibitions, the 64-case atlas, a guided personal workshop, and a research laboratory. A cinematic dark entrance introduces an original 64-point symbolic constellation (not an empirical network), followed by light exhibition spaces. Motion is restrained, respects reduced-motion preferences, and is never required for access. Historical photographs retain their aspect ratio; the illustrated fallback remains visible until the photograph loads. All facts retain source links and uncertainty labels. The design aims at high-end exhibition quality; no awards or independent design rating are claimed.

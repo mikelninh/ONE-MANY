@@ -12,12 +12,17 @@ const fs = require('node:fs');
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
   await page.waitForSelector('#featured .lead-card');
   await page.locator('#featurePhoto .media-frame').waitFor();
+  assert.equal(await page.locator('.constellation-star').count(),64);
+  await page.locator('#enterMuseum').click();
+  assert.match(await page.locator('#exhibitTitle').innerText(),/Ein Baum/);
   assert.equal(await page.locator('#featurePhoto .photo-fallback:visible, #featurePhoto img:visible').count(),1,'One visible media layer');
   await page.locator('[data-feature="1"]').click();
   assert.match(await page.locator('#featureCaption').innerText(),/Rosa Parks/);
+  assert.match(await page.locator('#exhibitTitle').innerText(),/Ein Nein/);
   await page.locator('[data-feature="0"]').click();
   await page.evaluate(()=>window.scrollTo(0,0));
   await page.screenshot({path:'qa-results/home-'+width+'.png',fullPage:true});
+  if(width===1440||width===390){await page.screenshot({path:'qa-results/entrance-'+width+'.png'});await page.locator('#leadCases').scrollIntoViewIfNeeded();await page.screenshot({path:'qa-results/exhibition-'+width+'.png'});}
   assert.equal(await page.locator('#featured .lead-card').count(),3);
   assert.equal(await page.locator('#atlasDots button').count(),64);
   await page.locator('#atlasDots button').nth(3).click();
