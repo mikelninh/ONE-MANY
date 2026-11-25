@@ -4,10 +4,10 @@
 
 From inspiration to action: discover stories, learn methods, plan experiments, explore official democratic participation channels and document outcomes.
 
-## v1.2 — The editorial edition
+## v1.3 — The editorial edition
 
 - 64 short portraits, 16 with source leads; 48 research candidates.
-- Six selected archival photographs with source links and attribution; other entries use thematic illustrations, not fabricated portraits.
+- Sixteen selected archival image references with source and attribution; each of the 64 stories has an individual editorial cover title and graphic fallback. Portraits are shown without cropping; image availability depends on Wikimedia.
 - Search, topic filters, reading list, research notes, project workspace, impact documentation and JSON import/export.
 - No accounts or shared database. Personal entries remain in browser storage. Images are loaded from Wikimedia.
 - The archive is not a causal study of effectiveness. Lessons are hypotheses, not validated universal rules.
@@ -27,6 +27,6 @@ Validate 100 cases first, then grow toward 1,000 and eventually 10,000. Include 
 
 ## Attribution
 
-Photograph sources and licenses appear alongside the images. See the linked Wikimedia Commons file pages for rights and attribution details. Illustrations are thematic. The project is independent, not endorsed by ProjectTogether or the School for Moral Ambition.
+Photograph sources and licenses appear alongside the images. See the linked Wikimedia Commons file pages for rights and attribution details. Editorial covers are original typographic and geometric designs, not historical photographs. The project is independent, not endorsed by ProjectTogether or the School for Moral Ambition.
 
 Code licensing and contribution governance remain to be explicitly agreed.
