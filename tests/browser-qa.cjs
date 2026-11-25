@@ -9,7 +9,7 @@ const fs = require('node:fs');
   const page=await browser.newPage({viewport:{width,height:900}});
   const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+  await page.goto('http://127.0.0.1:8765/archive.html',{waitUntil:'domcontentloaded'});
   await page.waitForSelector('#featured .lead-card');
   await page.locator('#featurePhoto .media-frame').waitFor();
   assert.equal(await page.locator('.constellation-star').count(),64);
@@ -58,9 +58,36 @@ const fs = require('node:fs');
   results.push({width,passed:true,images:24,stories:64,errors});
   await page.close();
  }
+
+ for(const width of [1440,1024,768,390,320]){
+  const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
+  const errs=[];p.on('pageerror',e=>errs.push(e.message));
+  await p.goto('http://127.0.0.1:8765/');
+  await p.locator('#headline').waitFor();
+  assert.match(await p.locator('#headline').innerText(),/Ein Platz/);
+  assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'New entrance overflow '+width);
+  assert.equal(await p.locator('.art-layer.active').count(),1);
+  await p.screenshot({path:'qa-results/first-move-'+width+'.png',fullPage:true});
+  await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/381 Tage/);
+  await p.locator('#advance').click();assert.match(await p.locator('#beatLabel').innerText(),/Die Frage/);
+  await p.locator('#advance').click();assert.match(await p.locator('#headline').innerText(),/Ein Samen/);
+  await p.locator('[data-chapter="2"]').click();assert.match(await p.locator('#headline').innerText(),/Ein Tisch/);
+  await p.locator('[data-chapter="3"]').click();
+  assert.equal(await p.locator('#actionPane').isVisible(),true);
+  await p.locator('#problem').fill('Ein Testprojekt');
+  await p.locator('#action').fill('Drei Gespräche führen');
+  await p.locator('#metricInput').fill('Anzahl Gespräche');
+  await p.locator('#actionForm button[type="submit"]').click();
+  await p.waitForURL('**/archive.html#projects');
+  assert.equal(await p.locator('#f-title').inputValue(),'Ein Testprojekt');
+  assert.equal(errs.length,0,errs.join('; '));
+  results.push({newEntranceWidth:width,passed:true,chapters:3,actionTransfer:true});
+  await p.close();
+ }
+
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
- await failure.goto('http://127.0.0.1:8765/');
+ await failure.goto('http://127.0.0.1:8765/archive.html');
  await failure.waitForSelector('#featurePhoto .media-frame.art-only');
  assert.equal(await failure.locator('#featurePhoto .photo-fallback').isVisible(),true);
  assert.equal(await failure.locator('#featurePhoto img').isVisible(),false);
