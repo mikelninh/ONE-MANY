@@ -1,32 +1,24 @@
 # ONE / MANY
 
-**Every human matters.** An open project for human agency and collective learning.
+**The Art of Changing the World.**  
+Die Welt ist noch nicht fertig.
 
-From inspiration to action: discover stories, learn methods, plan experiments, explore official democratic participation channels and document outcomes.
+An independent, open research and product prototype for human agency and collective learning.
 
-## v1.3 — The editorial edition
+## Experience v2.0
+- Discover: 64 short portraits across eight themes, including three expanded case studies.
+- Understand: practical learning hypotheses, methods, source leads, and a research notebook.
+- Become: three-step guided experiment creation, private project workspace, official democratic participation routes, and local outcome documentation.
+- 17 archival image references and 64 editorial fallback covers. The three lead image source pages and licenses were checked; not every image or story has been independently reviewed.
+- Personal drafts and notes are stored in the browser, not synced to a server. JSON exports are available. No accounts or live AI.
 
-- 64 short portraits, 16 with source leads; 48 research candidates.
-- Sixteen selected archival image references with source and attribution; each of the 64 stories has an individual editorial cover title and graphic fallback. Portraits are shown without cropping; image availability depends on Wikimedia.
-- Search, topic filters, reading list, research notes, project workspace, impact documentation and JSON import/export.
-- No accounts or shared database. Personal entries remain in browser storage. Images are loaded from Wikimedia.
-- The archive is not a causal study of effectiveness. Lessons are hypotheses, not validated universal rules.
+## Try it
+https://mikelninh.github.io/ONE-MANY/
 
-## Run
+Run locally by opening index.html in a modern browser, or use a static web server. GitHub Pages deploys from main / root.
 
-Open index.html in a browser, or serve the repository using any static web host. No build step or dependencies are needed.
+## Research mission
+Study 10,000 comparable cases over time, including failures and counterevidence. Proposed pilot: five individuals and five communities, 100 days of consent-based experimentation; assess whether participants can solve a subsequent problem more independently. These are proposed goals, not achieved results.
 
-## Publish on GitHub Pages
-
-In Settings → Pages, choose Deploy from a branch, main, / (root), then Save.
-Expected URL after successful deployment: https://mikelninh.github.io/ONE-MANY/
-
-## Research roadmap
-
-Validate 100 cases first, then grow toward 1,000 and eventually 10,000. Include unsuccessful projects, counterevidence, context and reproducibility. Pilot the individual and community workflow with consenting participants. Real decisions remain with people and democratically authorized institutions.
-
-## Attribution
-
-Photograph sources and licenses appear alongside the images. See the linked Wikimedia Commons file pages for rights and attribution details. Editorial covers are original typographic and geometric designs, not historical photographs. The project is independent, not endorsed by ProjectTogether or the School for Moral Ambition.
-
-Code licensing and contribution governance remain to be explicitly agreed.
+## Status and limitations
+The source includes a working local prototype. Syntax and core simulated JavaScript workflows have been checked. Full visual browser QA, accessibility testing, image delivery and rights audit across all cases, and independent impact evaluation remain outstanding. Photos are loaded from Wikimedia; attribution and license links are shown beside the photographs. Editorial fallback graphics are original typographic designs, not historical images. No official partnership is claimed. Code licensing and contribution governance remain to be agreed.
