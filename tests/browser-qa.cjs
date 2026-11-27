@@ -122,6 +122,25 @@ const fs = require('node:fs');
  }
  const visit=await browser.newPage({viewport:{width:390,height:844},acceptDownloads:true});
  await visit.goto('http://127.0.0.1:8765/visit-test.html');await visit.locator('#clarity').selectOption('4');await visit.locator('#visual').selectOption('5');await visit.locator('#action').selectOption('maybe');await visit.locator('#consent').check();const downloaded=visit.waitForEvent('download');await visit.locator('#export').click();const file=await downloaded;assert.equal(file.suggestedFilename(),'one-many-feedback.json');assert.equal(await visit.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);results.push({visitorFeedbackExport:true});await visit.close();
+ for(const width of [1440,390,320]){
+ const p=await browser.newPage({viewport:{width,height:900},acceptDownloads:true});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('http://127.0.0.1:8765/science.html');
+ assert.match(await p.locator('#caseBodyA').innerText(),/Rosa Parks/);assert.match(await p.locator('#caseBodyB').innerText(),/Wangari Maathai/);
+ await p.locator('#swap').click();assert.match(await p.locator('#caseBodyA').innerText(),/Wangari Maathai/);
+ await p.locator('#caseB').selectOption('7');assert.match(await p.locator('#caseBodyB').innerText(),/Noch nicht systematisch/);
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Science comparison overflow '+width);
+ await p.screenshot({path:'qa-results/science-'+width+'.png',fullPage:true});
+ await p.locator('#tab-queue').click();assert.equal(await p.locator('.qrow').count(),64);
+ await p.locator('#qStatus').selectOption('missing');assert.equal(await p.locator('.qrow').count(),36);
+ await p.locator('#qStatus').selectOption('deep');assert.equal(await p.locator('.qrow').count(),3);
+ await p.locator('[data-note="1"]').click();await p.locator('#counter').fill('Alternative Erklärung prüfen');await p.locator('#saveNote').click();assert.match(await p.locator('#noteStatus').innerText(),/gespeichert/);
+ await p.reload();await p.locator('#tab-queue').click();await p.locator('#qStatus').selectOption('noted');assert.equal(await p.locator('.qrow').count(),1);await p.locator('[data-note="1"]').click();assert.equal(await p.locator('#counter').inputValue(),'Alternative Erklärung prüfen');
+ const download=p.waitForEvent('download');await p.locator('#exportResearch').click();assert.equal((await download).suggestedFilename(),'one-many-research.json');
+ await p.locator('#tab-experiment').click();await p.locator('[data-hyp="0"]').click();assert.match(await p.locator('#hypothesis').inputValue(),/Fähigkeit/);
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Science experiment overflow '+width);
+ await p.locator('#experimentForm button[type="submit"]').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Selbstwirksamkeit statt Abhängigkeit');assert.match(await p.locator('#f-inspiration').inputValue(),/The Science of Good/);
+ assert.equal(errors.length,0,errors.join('; '));results.push({scienceWidth:width,compare:true,notes:true,export:true,experimentTransfer:true});await p.close();
+ }
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
  await failure.goto('http://127.0.0.1:8765/archive.html');

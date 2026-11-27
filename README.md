@@ -37,3 +37,6 @@ The light museum entrance provides two exhibitions and eight themed rooms. atlas
 
 ## Visitor experiment 001
 visit-test.html is a voluntary, no-tracking visitor feedback form with local JSON export. docs/visitor-study.md defines a proposed five-person formative study. No participants have been recruited or results collected.
+
+## The Science of Good / v0.1
+science.html compares all 64 cases, displays three expanded case records, separates descriptive evidence and causal hypotheses, supports a private counterevidence notebook, JSON exports and three editable experiment drafts that transfer to the existing workshop. Research protocol: docs/research-protocol.md. No empirical impact study or automated source verification is claimed.
