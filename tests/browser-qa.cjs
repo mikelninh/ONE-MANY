@@ -83,6 +83,21 @@ const fs = require('node:fs');
  await p.locator('#form .save').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Ein Testprojekt');
  assert.equal(errors.length,0,errors.join('; '));results.push({museumWidth:width,passed:true,rooms:8,actionTransfer:true});await p.close();
  }
+ for(const width of [1440,390,320]){
+ const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('http://127.0.0.1:8765/');
+ await p.locator('#openCollection').click();await p.locator('.beyond-card a.collection-cta').click();
+ await p.waitForURL('**/beyond.html?scene=1');
+ assert.match(await p.locator('#headline').innerText(),/Ein Blick/);assert.match(await p.locator('#imageCredit').innerText(),/AmyAbroad/);
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Beyond overflow '+width);
+ await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/Zweige/);
+ await p.locator('#filmstrip .chapter').nth(1).click();assert.match(await p.locator('#headline').innerText(),/Ein Tisch/);
+ await p.locator('#filmstrip .chapter').nth(2).click();assert.match(await p.locator('#headline').innerText(),/Ein Leben/);
+ await p.locator('#filmstrip .chapter').nth(3).click();assert.equal(await p.locator('#action').isVisible(),true);
+ await p.locator('#problem').fill('Pflanzliche Auswahl');await p.locator('#step').fill('Ein freiwilliges Tasting');await p.locator('#measure').fill('Gewählte pflanzliche Portionen');
+ await p.locator('#form .save').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Pflanzliche Auswahl');
+ assert.equal(errors.length,0,errors.join('; '));results.push({beyondWidth:width,passed:true,actionTransfer:true});await p.close();
+ }
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
  await failure.goto('http://127.0.0.1:8765/archive.html');

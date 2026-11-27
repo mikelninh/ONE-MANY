@@ -28,3 +28,6 @@ A digital museum, not a feed. Four rooms: curated historical exhibitions, the 64
 
 ## Museum Collection 001
 Cinema Edition is the primary entry, with a chooser for the First Move and eight existing themed archive rooms. The scenes are AI-generated symbolic illustrations. Scene links use ?scene=1 through ?scene=4. The previous vector exhibition is preserved in first-move.html. Archive and workshop retain local storage.
+
+## Exhibition 002 — Beyond Ourselves
+Three chapters on observing animals, vegan living, and sanctuary care. Institutional historical sources and individually credited Wikimedia photographs (contextual images, not historical evidence). A new experiment flows to the existing workshop. Image delivery is external and requires separate visual QA.
