@@ -113,13 +113,15 @@ const fs = require('node:fs');
  await p.locator('#closeReader').click();await p.locator('#reset').click();await p.locator('#onlySaved').check();assert.equal(await p.locator('#grid .story').count(),1);
  await p.reload();await p.locator('#onlySaved').check();assert.equal(await p.locator('#grid .story').count(),1);
  await p.locator('#reset').click();await p.locator('[data-view="timeline"]').click();assert.equal(await p.locator('#grid.timeline .story').count(),64);
- await p.locator('#mechanism').selectOption('Wissen teilen');assert.ok(await p.locator('#grid .story').count()>0);await p.locator('#reset').click();await p.locator('[data-view="grid"]').click();
+ await p.locator('#epoch').selectOption('1980–1999');assert.ok(await p.locator('#grid .story').count()>0);await p.locator('#reset').click();await p.locator('#mechanism').selectOption('Wissen teilen');assert.ok(await p.locator('#grid .story').count()>0);await p.locator('#reset').click();await p.locator('[data-view="grid"]').click();
  assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Atlas overflow '+width);
  await p.screenshot({path:'qa-results/living-atlas-'+width+'.png'});
  await p.goto('http://127.0.0.1:8765/atlas.html?story=1');assert.equal(await p.locator('#reader').evaluate(e=>e.open),true);
  await p.locator('#readerBody a.btn').first().click();await p.waitForURL('**/archive.html#home');assert.match(await p.locator('#detailBody').innerText(),/Ein Nein/);
  assert.equal(errors.length,0,errors.join('; '));results.push({grandWidth:width,atlas:true,filters:true,bookmark:true,deepLink:true});await p.close();
  }
+ const visit=await browser.newPage({viewport:{width:390,height:844},acceptDownloads:true});
+ await visit.goto('http://127.0.0.1:8765/visit-test.html');await visit.locator('#clarity').selectOption('4');await visit.locator('#visual').selectOption('5');await visit.locator('#action').selectOption('maybe');await visit.locator('#consent').check();const downloaded=visit.waitForEvent('download');await visit.locator('#export').click();const file=await downloaded;assert.equal(file.suggestedFilename(),'one-many-feedback.json');assert.equal(await visit.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);results.push({visitorFeedbackExport:true});await visit.close();
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
  await failure.goto('http://127.0.0.1:8765/archive.html');
