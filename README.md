@@ -25,3 +25,6 @@ The source includes a working local prototype. Syntax and core simulated JavaScr
 
 ## Design definition
 A digital museum, not a feed. Four rooms: curated historical exhibitions, the 64-case atlas, a guided personal workshop, and a research laboratory. A cinematic dark entrance introduces an original 64-point symbolic constellation (not an empirical network), followed by light exhibition spaces. Motion is restrained, respects reduced-motion preferences, and is never required for access. Historical photographs retain their aspect ratio; the illustrated fallback remains visible until the photograph loads. All facts retain source links and uncertainty labels. The design aims at high-end exhibition quality; no awards or independent design rating are claimed.
+
+## Museum Collection 001
+Cinema Edition is the primary entry, with a chooser for the First Move and eight existing themed archive rooms. The scenes are AI-generated symbolic illustrations. Scene links use ?scene=1 through ?scene=4. The previous vector exhibition is preserved in first-move.html. Archive and workshop retain local storage.

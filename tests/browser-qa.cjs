@@ -60,31 +60,29 @@ const fs = require('node:fs');
  }
 
  for(const width of [1440,1024,768,390,320]){
-  const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
-  const errs=[];p.on('pageerror',e=>errs.push(e.message));
-  await p.goto('http://127.0.0.1:8765/');
-  await p.locator('#headline').waitFor();
-  assert.match(await p.locator('#headline').innerText(),/Ein Platz/);
-  assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'New entrance overflow '+width);
-  assert.equal(await p.locator('.art-layer.active').count(),1);
-  await p.screenshot({path:'qa-results/first-move-'+width+'.png',fullPage:true});
-  await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/381 Tage/);
-  await p.locator('#advance').click();assert.match(await p.locator('#beatLabel').innerText(),/Die Frage/);
-  await p.locator('#advance').click();assert.match(await p.locator('#headline').innerText(),/Ein Samen/);
-  await p.locator('[data-chapter="2"]').click();assert.match(await p.locator('#headline').innerText(),/Ein Tisch/);
-  await p.locator('[data-chapter="3"]').click();
-  assert.equal(await p.locator('#actionPane').isVisible(),true);
-  await p.locator('#problem').fill('Ein Testprojekt');
-  await p.locator('#action').fill('Drei Gespräche führen');
-  await p.locator('#metricInput').fill('Anzahl Gespräche');
-  await p.locator('#actionForm button[type="submit"]').click();
-  await p.waitForURL('**/archive.html#projects');
-  assert.equal(await p.locator('#f-title').inputValue(),'Ein Testprojekt');
-  assert.equal(errs.length,0,errs.join('; '));
-  results.push({newEntranceWidth:width,passed:true,chapters:3,actionTransfer:true});
-  await p.close();
+ const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('http://127.0.0.1:8765/');
+ assert.match(await p.locator('#headline').innerText(),/Ein Platz/);
+ assert.equal(await p.locator('.scene.active').count(),1);
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Museum overflow '+width);
+ await p.screenshot({path:'qa-results/museum-'+width+'.png',fullPage:true});
+ await p.locator('#openCollection').click();
+ assert.equal(await p.locator('#collection').evaluate(e=>e.open),true);
+ assert.equal(await p.locator('.room-card').count(),8);
+ await p.screenshot({path:'qa-results/collections-'+width+'.png'});
+ await p.locator('.room-card').nth(2).click();await p.waitForURL('**/archive.html?room=**');
+ assert.equal(await p.locator('#category').inputValue(),'Tiere & Mitgefühl');assert.equal(await p.locator('#storyGrid .story').count(),8);
+ await p.goto('http://127.0.0.1:8765/?scene=2');assert.match(await p.locator('#headline').innerText(),/Ein Samen/);
+ await p.locator('#openCollection').click();await p.locator('#startExhibit').click();assert.match(await p.locator('#headline').innerText(),/Ein Platz/);
+ await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/381 Tage/);
+ await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/Welche Regel/);
+ await p.locator('#advance').click();assert.match(await p.locator('#headline').innerText(),/Ein Samen/);
+ await p.locator('#filmstrip .chapter').nth(2).click();assert.match(await p.locator('#headline').innerText(),/Ein Tisch/);
+ await p.locator('#filmstrip .chapter').nth(3).click();assert.equal(await p.locator('#action').isVisible(),true);
+ await p.locator('#problem').fill('Ein Testprojekt');await p.locator('#step').fill('Drei Gespräche führen');await p.locator('#measure').fill('Anzahl Gespräche');
+ await p.locator('#form .save').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Ein Testprojekt');
+ assert.equal(errors.length,0,errors.join('; '));results.push({museumWidth:width,passed:true,rooms:8,actionTransfer:true});await p.close();
  }
-
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
  await failure.goto('http://127.0.0.1:8765/archive.html');
