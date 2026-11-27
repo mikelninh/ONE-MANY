@@ -40,3 +40,6 @@ visit-test.html is a voluntary, no-tracking visitor feedback form with local JSO
 
 ## The Science of Good / v0.1
 science.html compares all 64 cases, displays three expanded case records, separates descriptive evidence and causal hypotheses, supports a private counterevidence notebook, JSON exports and three editable experiment drafts that transfer to the existing workshop. Research protocol: docs/research-protocol.md. No empirical impact study or automated source verification is claimed.
+
+## Your Move / guided learning companion
+Your Move is a four-step, rule-based private experiment designer for eight scales. It provides generic method prompts, explicit alternatives, safeguards, an outcome measure and a disconfirmation criterion; drafts resume locally and can be exported or transferred to the existing workshop. It is not a live AI assistant. Existing four embedded Cinema artworks are reused in Your Move and the Science of Good; the three deep cases use their associated symbolic scenes, other cases use the existing credited references and fallback illustrations. No new historical image rights or causal claims are made.

@@ -141,6 +141,21 @@ const fs = require('node:fs');
  await p.locator('#experimentForm button[type="submit"]').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Selbstwirksamkeit statt Abhängigkeit');assert.match(await p.locator('#f-inspiration').inputValue(),/The Science of Good/);
  assert.equal(errors.length,0,errors.join('; '));results.push({scienceWidth:width,compare:true,notes:true,export:true,experimentTransfer:true});await p.close();
  }
+ for(const width of [1440,390,320]){
+ const p=await browser.newPage({viewport:{width,height:900},acceptDownloads:true});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('http://127.0.0.1:8765/your-move.html');await p.locator('#sceneArt').evaluate(e=>e.decode());assert.ok(await p.locator('#sceneArt').evaluate(e=>e.naturalWidth>0));
+ await p.screenshot({path:'qa-results/your-move-'+width+'.png',fullPage:true});
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Your Move overflow '+width);
+ await p.locator('#next').click();assert.equal(await p.locator('#pane0').isVisible(),true);assert.match(await p.locator('#status').innerText(),/ergänze/);
+ await p.locator('[data-scope="Familie"]').click();await p.locator('#problem').fill('Gemeinsame Aufgaben');await p.locator('#next').click();assert.equal(await p.locator('#pane1').isVisible(),true);
+ await p.locator('[data-method="2"]').click();await p.locator('#goal').fill('Aufgaben eigenständig lösen');await p.locator('#next').click();
+ await p.locator('#metric').fill('Anzahl eigenständig gelöster Aufgaben');await p.locator('#reviewDate').fill('2026-12-10');await p.locator('#safety').fill('Freiwillige Teilnahme');
+ await p.reload();assert.equal(await p.locator('#pane2').isVisible(),true);assert.equal(await p.locator('#metric').inputValue(),'Anzahl eigenständig gelöster Aufgaben');
+ await p.locator('#next').click();await p.locator('#falsify').fill('Keine Verbesserung bei der Folgeaufgabe');assert.match(await p.locator('#summary').innerText(),/Familie/);
+ const dl=p.waitForEvent('download');await p.locator('#export').click();assert.equal((await dl).suggestedFilename(),'one-many-your-move.json');
+ await p.locator('#save').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Gemeinsame Aufgaben');assert.match(await p.locator('#f-inspiration').inputValue(),/Your Move/);
+ assert.equal(errors.length,0,errors.join('; '));results.push({yourMoveWidth:width,validation:true,localResume:true,export:true,projectTransfer:true});await p.close();
+ }
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());
  await failure.goto('http://127.0.0.1:8765/archive.html');
