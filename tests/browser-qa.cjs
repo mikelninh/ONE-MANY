@@ -61,7 +61,7 @@ const fs = require('node:fs');
 
  for(const width of [1440,1024,768,390,320]){
  const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
- await p.goto('http://127.0.0.1:8765/');
+ await p.goto('http://127.0.0.1:8765/cinema.html');
  assert.match(await p.locator('#headline').innerText(),/Ein Platz/);
  assert.equal(await p.locator('.scene.active').count(),1);
  assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Museum overflow '+width);
@@ -70,9 +70,9 @@ const fs = require('node:fs');
  assert.equal(await p.locator('#collection').evaluate(e=>e.open),true);
  assert.equal(await p.locator('.room-card').count(),8);
  await p.screenshot({path:'qa-results/collections-'+width+'.png'});
- await p.locator('.room-card').nth(2).click();await p.waitForURL('**/archive.html?room=**');
- assert.equal(await p.locator('#category').inputValue(),'Tiere & Mitgefühl');assert.equal(await p.locator('#storyGrid .story').count(),8);
- await p.goto('http://127.0.0.1:8765/?scene=2');assert.match(await p.locator('#headline').innerText(),/Ein Samen/);
+ await p.locator('.room-card').nth(2).click();await p.waitForURL('**/atlas.html?room=**');
+ assert.equal(await p.locator('#theme').inputValue(),'Tiere & Mitgefühl');assert.equal(await p.locator('#grid .story').count(),8);
+ await p.goto('http://127.0.0.1:8765/cinema.html?scene=2');assert.match(await p.locator('#headline').innerText(),/Ein Samen/);
  await p.locator('#openCollection').click();await p.locator('#startExhibit').click();assert.match(await p.locator('#headline').innerText(),/Ein Platz/);
  await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/381 Tage/);
  await p.locator('#advance').click();assert.match(await p.locator('#beatText').innerText(),/Welche Regel/);
@@ -85,7 +85,7 @@ const fs = require('node:fs');
  }
  for(const width of [1440,390,320]){
  const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
- await p.goto('http://127.0.0.1:8765/');
+ await p.goto('http://127.0.0.1:8765/cinema.html');
  await p.locator('#openCollection').click();await p.locator('.beyond-card a.collection-cta').click();
  await p.waitForURL('**/beyond.html?scene=1');
  assert.match(await p.locator('#headline').innerText(),/Ein Blick/);assert.match(await p.locator('#imageCredit').innerText(),/AmyAbroad/);
@@ -97,6 +97,28 @@ const fs = require('node:fs');
  await p.locator('#problem').fill('Pflanzliche Auswahl');await p.locator('#step').fill('Ein freiwilliges Tasting');await p.locator('#measure').fill('Gewählte pflanzliche Portionen');
  await p.locator('#form .save').click();await p.waitForURL('**/archive.html#projects');assert.equal(await p.locator('#f-title').inputValue(),'Pflanzliche Auswahl');
  assert.equal(errors.length,0,errors.join('; '));results.push({beyondWidth:width,passed:true,actionTransfer:true});await p.close();
+ }
+ for(const width of [1440,1024,768,390,320]){
+ const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto('http://127.0.0.1:8765/');
+ assert.match(await p.locator('h1').innerText(),/ein Mensch/);
+ assert.equal(await p.locator('.exhibit').count(),2);assert.equal(await p.locator('.room').count(),8);
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Entrance overflow '+width);
+ await p.screenshot({path:'qa-results/grand-'+width+'.png',fullPage:true});
+ await p.locator('.room').nth(2).click();await p.waitForURL('**/atlas.html?room=**');assert.equal(await p.locator('#grid .story').count(),8);
+ await p.locator('#reset').click();assert.equal(await p.locator('#grid .story').count(),64);
+ await p.locator('#search').fill('Rosa Parks');assert.equal(await p.locator('#grid .story').count(),1);
+ await p.locator('#grid [data-read]').first().click();assert.equal(await p.locator('#reader').evaluate(e=>e.open),true);
+ assert.match(await p.locator('#readerBody').innerText(),/Rosa Parks/);await p.locator('#readerBody [data-save]').click();
+ await p.locator('#closeReader').click();await p.locator('#reset').click();await p.locator('#onlySaved').check();assert.equal(await p.locator('#grid .story').count(),1);
+ await p.reload();await p.locator('#onlySaved').check();assert.equal(await p.locator('#grid .story').count(),1);
+ await p.locator('#reset').click();await p.locator('[data-view="timeline"]').click();assert.equal(await p.locator('#grid.timeline .story').count(),64);
+ await p.locator('#mechanism').selectOption('Wissen teilen');assert.ok(await p.locator('#grid .story').count()>0);await p.locator('#reset').click();await p.locator('[data-view="grid"]').click();
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Atlas overflow '+width);
+ await p.screenshot({path:'qa-results/living-atlas-'+width+'.png'});
+ await p.goto('http://127.0.0.1:8765/atlas.html?story=1');assert.equal(await p.locator('#reader').evaluate(e=>e.open),true);
+ await p.locator('#readerBody a.btn').first().click();await p.waitForURL('**/archive.html#home');assert.match(await p.locator('#detailBody').innerText(),/Ein Nein/);
+ assert.equal(errors.length,0,errors.join('; '));results.push({grandWidth:width,atlas:true,filters:true,bookmark:true,deepLink:true});await p.close();
  }
  const failure=await browser.newPage({viewport:{width:390,height:844}});
  await failure.route('**/*',route=>route.request().resourceType()==='image'?route.abort():route.continue());

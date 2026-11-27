@@ -31,3 +31,6 @@ Cinema Edition is the primary entry, with a chooser for the First Move and eight
 
 ## Exhibition 002 — Beyond Ourselves
 Three chapters on observing animals, vegan living, and sanctuary care. Institutional historical sources and individually credited Wikimedia photographs (contextual images, not historical evidence). A new experiment flows to the existing workshop. Image delivery is external and requires separate visual QA.
+
+## Grand Entrance / Living Atlas
+The light museum entrance provides two exhibitions and eight themed rooms. atlas.html has all 64 cases with search, place, epoch and mechanism filters, gallery/chronological view, random discovery, local bookmarks, shareable story links and the existing archive reader/action handoff. Mechanisms are editorial hypotheses; epoch uses the first stated year and broad labels where needed. Existing 24 image references and 64 unique illustrated fallback motifs are reused. The two exhibition pages and existing local data are preserved. No new empirical evaluation or full image verification is claimed.
